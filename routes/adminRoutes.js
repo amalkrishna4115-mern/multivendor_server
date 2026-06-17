@@ -103,6 +103,31 @@ router.put("/vendor/reject/:id", async (req, res) => {
   }
 });
 
+// Delete Vendor
+router.delete("/vendor/:id", async (req, res) => {
+  try {
+    const vendorId = req.params.id;
+
+    await Product.deleteMany({
+      vendorId: vendorId,
+    });
+
+    await User.findByIdAndDelete(vendorId);
+
+    res.json({
+      success: true,
+      message: "Vendor Deleted",
+    });
+
+  } catch (error) {
+    console.log(error);
+
+    res.status(500).json({
+      message: "Server Error",
+    });
+  }
+});
+
 // Delete Any Product (Admin)
 router.delete("/product/:id", async (req, res) => {
   try {
