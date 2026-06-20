@@ -4,6 +4,13 @@ const cors = require("cors");
 
 require("dotenv").config();
 
+console.log(
+  "Cloudinary Config:",
+  process.env.CLOUDINARY_CLOUD_NAME,
+  process.env.CLOUDINARY_API_KEY ? "API_KEY_OK" : "NO_API_KEY",
+  process.env.CLOUDINARY_API_SECRET ? "SECRET_OK" : "NO_SECRET"
+);
+
 const authRoutes = require("./routes/auth");
 const orderRoutes = require("./routes/order");
 const productRoutes = require("./routes/product");
@@ -43,6 +50,16 @@ mongoose
   .catch((err) => {
     console.log(err);
   });
+
+  app.use((err, req, res, next) => {
+  console.error("GLOBAL ERROR:");
+  console.error(err);
+  console.error(err.stack);
+
+  res.status(500).json({
+    message: err.message,
+  });
+});
 
 
 // Server
