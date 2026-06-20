@@ -4,11 +4,11 @@ const cors = require("cors");
 
 require("dotenv").config();
 
+console.log("CLOUD NAME:", process.env.CLOUDINARY_CLOUD_NAME);
+console.log("API KEY:", process.env.CLOUDINARY_API_KEY);
 console.log(
-  "Cloudinary Config:",
-  process.env.CLOUDINARY_CLOUD_NAME,
-  process.env.CLOUDINARY_API_KEY ? "API_KEY_OK" : "NO_API_KEY",
-  process.env.CLOUDINARY_API_SECRET ? "SECRET_OK" : "NO_SECRET"
+  "SECRET LENGTH:",
+  process.env.CLOUDINARY_API_SECRET?.length
 );
 
 const authRoutes = require("./routes/auth");

@@ -14,10 +14,9 @@ const Product = require("../models/Product");
 
 const storage = new CloudinaryStorage({
   cloudinary: cloudinary,
-  params: async (req, file) => ({
+  params: {
     folder: "products",
-    allowed_formats: ["jpg", "jpeg", "png", "webp"],
-  }),
+  },
 });
 
 const upload = multer({
@@ -33,7 +32,7 @@ router.post(
   upload.single("image"),
   async (req, res) => {
     try {
-      
+
       console.log("FILE:", req.file);
 
       const User = require("../models/User");
