@@ -5,22 +5,19 @@ const protect = require(
 const router = express.Router();
 
 const multer = require("multer");
-
+const cloudinary = require("../config/cloudinary");
+const { CloudinaryStorage } = require("multer-storage-cloudinary");
 const Product = require("../models/Product");
 
 
 // STORAGE
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, "uploads/");
-  },
 
-  filename: (req, file, cb) => {
-    cb(
-      null,
-      Date.now() + "-" + file.originalname
-    );
-  },
+const storage = new CloudinaryStorage({
+  cloudinary: cloudinary,
+  params: async (req, file) => ({
+    folder: "products",
+    allowed_formats: ["jpg", "jpeg", "png", "webp"],
+  }),
 });
 
 const upload = multer({
@@ -36,6 +33,8 @@ router.post(
   upload.single("image"),
   async (req, res) => {
     try {
+      
+      console.log("FILE:", req.file);
 
       const User = require("../models/User");
 
@@ -63,7 +62,7 @@ if (!vendor || !vendor.isApproved) {
         price,
         description,
         category,
-        image: req.file.filename,
+        image: req.file.path,
       });
 
       await newProduct.save();
@@ -196,11 +195,11 @@ router.put(
 
 
       // IF NEW IMAGE UPLOADED
-      if (req.file) {
+    // IF NEW IMAGE UPLOADED
+if (req.file) {
 
-        updatedData.image =
-          req.file.filename;
-      }
+  updatedData.image = req.file.path;
+}
 
 
       const updatedProduct =
